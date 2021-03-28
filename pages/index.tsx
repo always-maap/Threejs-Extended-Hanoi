@@ -5,14 +5,13 @@ import Plane from "../components/Plane";
 import Platform from "../components/Platform";
 import Ring from "../components/Ring";
 import Peg from "../components/Peg";
+import Lights from "../components/Lights";
 
 export default function Home() {
   return (
     <Canvas>
       <OrbitControls />
-      <ambientLight intensity={0.5} />
-      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-      <pointLight position={[-10, -10, -10]} />
+      <Lights />
       <Suspense fallback={"loading..."}>
         <Ring position={[0.5, 2, -0.5]} outerRadius={0.5} />
         <Ring position={[1.5, 5.1, -1.5]} outerRadius={1.5} />
@@ -20,8 +19,8 @@ export default function Home() {
         <Peg position={[5, 4, 0]} />
         <Peg position={[-5, 4, 0]} />
         <Platform />
+        <Plane />
       </Suspense>
-      <Plane />
     </Canvas>
   );
 }

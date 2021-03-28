@@ -1,13 +1,20 @@
-import { Color, TextureLoader } from "three";
+import { TextureLoader } from "three";
 import { useLoader } from "react-three-fiber";
 
 const Platform = () => {
-  const door = useLoader(TextureLoader, "/assets/WoodLight/Color.jpg");
+  const WoodLightColor = useLoader(TextureLoader, "/assets/WoodLight/Color.jpg");
+  const WoodLightNormal = useLoader(TextureLoader, "/assets/WoodLight/Normal.jpg");
+  const WoodLightRoughness = useLoader(TextureLoader, "/assets/WoodLight/Roughness.jpg");
 
   return (
-    <mesh position={[0, 0.25, 0]}>
+    <mesh position={[0, 0.25, 0]} castShadow>
       <boxBufferGeometry attach="geometry" args={[15, 0.5, 3]} />
-      <meshBasicMaterial attach="material" color={new Color("brown")} map={door} />
+      <meshStandardMaterial
+        attach="material"
+        roughnessMap={WoodLightRoughness}
+        normalMap={WoodLightNormal}
+        map={WoodLightColor}
+      />
     </mesh>
   );
 };
