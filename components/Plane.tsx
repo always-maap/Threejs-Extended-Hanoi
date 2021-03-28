@@ -14,7 +14,7 @@ const Plane = () => {
   });
 
   return (
-    <mesh rotation={[Math.PI / 2, 0, Math.PI / 2]} scale={[50, 50, 50]}>
+    <mesh rotation={[Math.PI / 2, 0, Math.PI / 2]} scale={[100, 100, 100]}>
       <planeBufferGeometry attach="geometry" />
       <meshStandardMaterial
         attach="material"

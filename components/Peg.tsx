@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { useLoader } from "react-three-fiber";
 import { TextureLoader } from "three";
+import { PEG_ARGS } from "../constants/sizes";
 
 const Peg = (props) => {
   const WoodChipsAmbientOcclusionTexture = useLoader(TextureLoader, "/assets/WoodChips/AmbientOcclusion.jpg");
@@ -10,7 +11,10 @@ const Peg = (props) => {
 
   return (
     <mesh {...props} castShadow>
-      <cylinderBufferGeometry attach="geometry" args={[0.25, 0.25, 8, 64]} />
+      <cylinderBufferGeometry
+        attach="geometry"
+        args={[PEG_ARGS.radius_top, PEG_ARGS.radius_bottom, PEG_ARGS.height, PEG_ARGS.radius_segments]}
+      />
       <meshStandardMaterial
         attach="material"
         map={WoodChipsColorTexture}
