@@ -1,6 +1,10 @@
 import * as THREE from "three";
+import { useLoader } from "react-three-fiber";
+import { TextureLoader } from "three";
 
 const Ring = (props) => {
+  const DarkWoodTexture = useLoader(TextureLoader, "/assets/WoodDark/Color.jpg");
+
   const outerRadius = props.outerRadius;
   const innerRadius = 0.25;
   const depth = 0.5;
@@ -19,7 +23,7 @@ const Ring = (props) => {
         attach="geometry"
         args={[arcShape, { bevelEnabled: false, steps: 1, curveSegments: 60, depth }]}
       />
-      <meshNormalMaterial attach="material" />
+      <meshBasicMaterial attach="material" map={DarkWoodTexture} />
     </mesh>
   );
 };

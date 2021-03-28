@@ -2,7 +2,7 @@ import { Color, TextureLoader } from "three";
 import { useLoader } from "react-three-fiber";
 
 const Platform = () => {
-  const door = useLoader(TextureLoader, "/static/WoodDark.jpg");
+  const door = useLoader(TextureLoader, "/assets/WoodLight/Color.jpg");
 
   return (
     <mesh position={[0, 0.25, 0]}>

@@ -13,12 +13,12 @@ export default function Home() {
       <ambientLight intensity={0.5} />
       <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
       <pointLight position={[-10, -10, -10]} />
-      <Ring position={[0.5, 2, -0.5]} outerRadius={0.5} />
-      <Ring position={[1.5, 5.1, -1.5]} outerRadius={1.5} />
-      <Peg position={[0, 4, 0]} />
-      <Peg position={[5, 4, 0]} />
-      <Peg position={[-5, 4, 0]} />
       <Suspense fallback={"loading..."}>
+        <Ring position={[0.5, 2, -0.5]} outerRadius={0.5} />
+        <Ring position={[1.5, 5.1, -1.5]} outerRadius={1.5} />
+        <Peg position={[0, 4, 0]} />
+        <Peg position={[5, 4, 0]} />
+        <Peg position={[-5, 4, 0]} />
         <Platform />
       </Suspense>
       <Plane />
