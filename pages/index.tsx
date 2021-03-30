@@ -15,13 +15,13 @@ export default function Home() {
     const r = [];
     for (let col = 0; col < 3; col++) {
       const place = col === 0 ? PEGS.left.width : col === 1 ? PEGS.middle.width : PEGS.right.width;
-      for (let row = 2; row > 0; row--) {
+      for (let row = 7; row > 0; row--) {
         const step = RING.outer_radius + (col + 1) * (row + 1) * 0.05;
         r.push(
           <Ring
             key={`${col}${row}`}
             ref={(item) => ringRef.current[col].push(item)}
-            position={[step + place, RING.depth * (2 - row + 1) + PLATFORM_ARGS.height, -step]}
+            position={[step + place, RING.depth * (7 - row + 1) + PLATFORM_ARGS.height, -step]}
             outerRadius={step}
           />
         );
@@ -40,7 +40,13 @@ export default function Home() {
     <>
       <button onClick={moveRing}>move</button>
       <Canvas>
-        <OrbitControls />
+        <OrbitControls
+          position={[5, 5, 5]}
+          minPolarAngle={0}
+          maxPolarAngle={Math.PI / 2.5}
+          minDistance={10}
+          maxDistance={20}
+        />
         <Lights />
         <Suspense fallback={"loading..."}>
           {drawRings()}
