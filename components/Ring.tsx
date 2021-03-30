@@ -1,8 +1,14 @@
 import * as THREE from "three";
 import { useLoader } from "react-three-fiber";
 import { TextureLoader } from "three";
+import { forwardRef } from "react";
+import { RING } from "../constants/sizes";
 
-const Ring = (props) => {
+type Props = {
+  outerRadius: number;
+};
+
+const Ring = forwardRef((props: any, ref) => {
   const WoodDarkAmbientOcclusionTexture = useLoader(TextureLoader, "/assets/WoodDark/AmbientOcclusion.jpg");
   const WoodDarkColorTexture = useLoader(TextureLoader, "/assets/WoodDark/Color.jpg");
   const WoodDarkNormalTexture = useLoader(TextureLoader, "/assets/WoodDark/Normal.jpg");
@@ -10,7 +16,7 @@ const Ring = (props) => {
 
   const outerRadius = props.outerRadius;
   const innerRadius = 0.25;
-  const depth = 0.5;
+  const depth = RING.depth;
 
   const arcShape = new THREE.Shape();
   arcShape.moveTo(outerRadius * 2, outerRadius);
@@ -21,7 +27,7 @@ const Ring = (props) => {
   arcShape.holes.push(holePath);
 
   return (
-    <mesh {...props} rotation={[Math.PI / 2, 0, Math.PI / 2]} castShadow>
+    <mesh {...props} rotation={[Math.PI / 2, 0, Math.PI / 2]} castShadow ref={ref}>
       <extrudeGeometry
         attach="geometry"
         args={[arcShape, { bevelEnabled: false, steps: 1, curveSegments: 60, depth }]}
@@ -35,6 +41,6 @@ const Ring = (props) => {
       />
     </mesh>
   );
-};
+});
 
 export default Ring;

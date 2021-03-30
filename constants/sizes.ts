@@ -1,11 +1,12 @@
 export const PLATFORM_ARGS = {
-  width: 15,
+  width: 20,
   height: 0.5,
   depth: 3,
 };
 
 export const RING = {
   outer_radius: 0.5,
+  depth: 0.5,
 };
 
 export const PEG_ARGS = {
@@ -17,7 +18,7 @@ export const PEG_ARGS = {
 
 export const PEGS = {
   right: {
-    width: 5,
+    width: 7,
     height: PEG_ARGS.height / 2 + PLATFORM_ARGS.height,
     depth: 0,
   },
@@ -27,7 +28,7 @@ export const PEGS = {
     depth: 0,
   },
   left: {
-    width: -5,
+    width: -7,
     height: PEG_ARGS.height / 2 + PLATFORM_ARGS.height,
     depth: 0,
   },
