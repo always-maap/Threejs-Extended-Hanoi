@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useRef } from "react";
+import { Suspense, useRef } from "react";
 import { Canvas } from "react-three-fiber";
 import { OrbitControls } from "@react-three/drei";
 import Plane from "../components/Plane";
@@ -30,23 +30,35 @@ export default function Home() {
     return r;
   };
 
-  const moveRing = () => {
-    setTimeout(() => (ringRef.current[0][0].position.y += PEG_ARGS.height), 500);
-    setTimeout(() => (ringRef.current[0][0].position.x += 7), 1000);
-    setTimeout(() => (ringRef.current[0][0].position.y -= PEG_ARGS.height), 1500);
+  const moveRing = (from: number, to: number) => {
+    const selectedRing = ringRef.current[from][ringRef.current[from].length - 1];
+
+    const fromLength = ringRef.current[from].length;
+    const toLength = ringRef.current[to].length;
+    const toRing =
+      to > from
+        ? to - from === 2
+          ? PEG_ARGS.space_between * 2
+          : PEG_ARGS.space_between
+        : to - from === -2
+        ? -PEG_ARGS.space_between * 2
+        : -PEG_ARGS.space_between;
+
+    ringRef.current[from].pop();
+    ringRef.current[to].push(selectedRing);
+
+    const fromToDifferent = RING.depth * (toLength - fromLength + 1);
+
+    setTimeout(() => (selectedRing.position.y += PEG_ARGS.height), 500);
+    setTimeout(() => (selectedRing.position.x += toRing), 1000);
+    setTimeout(() => (selectedRing.position.y -= PEG_ARGS.height - fromToDifferent), 1500);
   };
 
   return (
     <>
-      <button onClick={moveRing}>move</button>
+      <button onClick={() => moveRing(0, 2)}>move</button>
       <Canvas>
-        <OrbitControls
-          position={[5, 5, 5]}
-          minPolarAngle={0}
-          maxPolarAngle={Math.PI / 2.5}
-          minDistance={10}
-          maxDistance={20}
-        />
+        <OrbitControls minPolarAngle={0} maxPolarAngle={Math.PI / 2.5} minDistance={10} maxDistance={20} />
         <Lights />
         <Suspense fallback={"loading..."}>
           {drawRings()}
