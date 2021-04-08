@@ -1,5 +1,5 @@
 export const PLATFORM_ARGS = {
-  width: 20,
+  width: 15,
   height: 0.5,
   depth: 3,
 };
@@ -14,7 +14,7 @@ export const PEG_ARGS = {
   radius_bottom: 0.25,
   height: 7,
   radius_segments: 64,
-  space_between: 7,
+  space_between: 5,
 };
 
 export const PEGS = {
