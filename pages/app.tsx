@@ -1,4 +1,4 @@
-import { Suspense, useRef } from "react";
+import { Suspense, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas } from "react-three-fiber";
 import { OrbitControls } from "@react-three/drei";
 import Plane from "../components/Plane";
@@ -9,33 +9,57 @@ import Lights from "../components/Lights";
 import { PEG_ARGS, PEGS, PLATFORM_ARGS, RING } from "../constants/sizes";
 import * as THREE from "three";
 import { useRouter } from "next/router";
+import { HanoiSolver } from "../lib/ex-hanoi";
+import { HanoiContext } from "./_app";
 
 export default function Home() {
+  const [hanoiHistory] = useContext(HanoiContext);
   const { query } = useRouter();
+  const { ringInPeg } = query;
+
+  // TODO: Refactor these functionality
+
   const ringRef = useRef([[], [], []]);
 
+  const fill = () => {
+    let idx = 0.35;
+    let curr = 0;
+    let ringSizes = [[], [], []];
+    const fillArr = () => {
+      if (curr < +ringInPeg) {
+        for (let j = 0; j < 3; j++) {
+          ringSizes[j].push(idx);
+          idx += 0.1;
+        }
+        curr++;
+        fillArr();
+      }
+      return ringSizes;
+    };
+    return fillArr();
+  };
+
   const drawRings = () => {
-    const { ringInPeg } = query;
-    const r = [];
-    for (let col = 0; col < 3; col++) {
-      const place = col === 0 ? PEGS.left.width : col === 1 ? PEGS.middle.width : PEGS.right.width;
-      for (let row = +ringInPeg; row > 0; row--) {
-        const step = RING.outer_radius + (col + 1) * (row + 1) * 0.05;
-        r.push(
+    const yy = fill();
+    const rr = [];
+    yy.map((col, ci) => {
+      const place = ci === 0 ? PEGS.left.width : ci === 1 ? PEGS.middle.width : PEGS.right.width;
+      return col.map((row, ri) => {
+        rr.push(
           <Ring
             key={`${col}${row}`}
-            ref={(item) => ringRef.current[col].push(item)}
-            position={[step + place, RING.depth * (+ringInPeg - row + 1) + PLATFORM_ARGS.height, -step]}
-            outerRadius={step}
+            ref={(item) => ringRef.current[ci].push(item)}
+            position={[row + place, RING.depth * (+ringInPeg - ri) + PLATFORM_ARGS.height, -row]}
+            outerRadius={row}
           />
         );
-      }
-    }
-    return r;
+      });
+    });
+    return rr;
   };
 
   const moveRing = (from: number, to: number) => {
-    const selectedRing = ringRef.current[from][ringRef.current[from].length - 1];
+    const selectedRing = ringRef.current[from][0];
 
     const fromLength = ringRef.current[from].length;
     const toLength = ringRef.current[to].length;
@@ -48,8 +72,8 @@ export default function Home() {
         ? -PEG_ARGS.space_between * 2
         : -PEG_ARGS.space_between;
 
-    ringRef.current[from].pop();
-    ringRef.current[to].push(selectedRing);
+    ringRef.current[from].shift();
+    ringRef.current[to].unshift(selectedRing);
 
     const fromToDifferent = RING.depth * (toLength - fromLength + 1);
 
@@ -58,9 +82,21 @@ export default function Home() {
     setTimeout(() => (selectedRing.position.y -= PEG_ARGS.height - fromToDifferent), 1500);
   };
 
+  const start = () => {
+    const table = {
+      A: 2,
+      B: 1,
+      C: 0,
+    };
+
+    hanoiHistory.forEach((i, index) => {
+      setTimeout(() => moveRing(table[i.from], table[i.to]), index * 1500);
+    });
+  };
+
   return (
     <>
-      <button onClick={() => moveRing(0, 2)}>move</button>
+      <button onClick={start}>move</button>
       <Canvas>
         <OrbitControls minPolarAngle={0} maxPolarAngle={Math.PI / 2.5} minDistance={10} maxDistance={20} />
         <Lights />
