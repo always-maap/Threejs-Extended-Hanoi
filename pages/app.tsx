@@ -1,20 +1,19 @@
-import { Suspense, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import React, { Suspense, useContext, useRef } from "react";
 import { Canvas } from "react-three-fiber";
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, Sky, Stars } from "@react-three/drei";
 import Plane from "../components/Plane";
 import Platform from "../components/Platform";
 import Ring from "../components/Ring";
 import Peg from "../components/Peg";
 import Lights from "../components/Lights";
 import { PEG_ARGS, PEGS, PLATFORM_ARGS, RING } from "../constants/sizes";
-import * as THREE from "three";
 import { useRouter } from "next/router";
-import { HanoiSolver } from "../lib/ex-hanoi";
 import { HanoiContext } from "./_app";
+import { button, useControls } from "leva";
 
 export default function Home() {
   const [hanoiHistory] = useContext(HanoiContext);
-  const { query } = useRouter();
+  const { query, push } = useRouter();
   const { ringInPeg } = query;
 
   // TODO: Refactor these functionality
@@ -89,15 +88,22 @@ export default function Home() {
       C: 0,
     };
 
+    if (hanoiHistory.length === 0) {
+      push("/");
+    }
+
     hanoiHistory.forEach((i, index) => {
       setTimeout(() => moveRing(table[i.from], table[i.to]), index * 1500);
     });
   };
 
+  const _ = useControls({ move: button(start) });
+
   return (
     <>
-      <button onClick={start}>move</button>
-      <Canvas>
+      <Canvas shadowMap>
+        <Sky distance={450000} sunPosition={[0, 1, 0]} inclination={0} azimuth={0.25} />
+        <Stars />
         <OrbitControls minPolarAngle={0} maxPolarAngle={Math.PI / 2.5} minDistance={10} maxDistance={20} />
         <Lights />
         <Suspense fallback={"loading..."}>

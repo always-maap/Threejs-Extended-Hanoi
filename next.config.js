@@ -1,3 +1,6 @@
-const withTM = require("next-transpile-modules")(["three", "@react-three/drei"]);
-
-module.exports = withTM();
+module.exports = {
+  compiler: {
+    // Enables the styled-components SWC transform
+    styledComponents: true,
+  },
+};
